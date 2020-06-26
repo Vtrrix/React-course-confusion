@@ -8,6 +8,7 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import { COMMENTS } from "../shared/comments";
 import { PROMOTIONS } from "../shared/promotions";
 import { LEADERS } from "../shared/leaders";
+import DishdetailComponent from "./DishdetailComponent";
 
 import Footer from "./FooterComponent";
 
@@ -28,6 +29,20 @@ class Main extends Component {
 	}
 
 	render() {
+		const DishWithId = ({ match }) => {
+			return (
+				<DishdetailComponent
+					dish={
+						this.state.dishes.filter(
+							(dish) => dish.id === parseInt(match.params.dishId, 10)
+						)[0]
+					}
+					comments={this.state.comments.filter(
+						(comment) => comment.dishId === parseInt(match.params.dishId, 10)
+					)}
+				/>
+			);
+		};
 		const HomePage = () => {
 			return (
 				<Home
@@ -47,6 +62,7 @@ class Main extends Component {
 						path="/menu"
 						component={() => <Menu dishes={this.state.dishes} />}
 					/>
+					<Route path="/menu/:dishId" component={DishWithId} />
 					<Route exact path="/contactus" component={Contact} />} />
 					<Redirect to="/home" />
 				</Switch>
